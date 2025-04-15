@@ -1,15 +1,17 @@
 from rest_framework import serializers
-from .models import Country, Address, UserAddress
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.contrib.auth.password_validation import validate_password
+from .models import Chair, Sofa, DiningSet
 
-class UserSerializer(serializers.ModelSerializer):
+class ChairSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name ', 'email', 'password']
+        model = Chair
+        fields = '__all__'
 
+class SofaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sofa
+        fields = '__all__'
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
+class DiningSetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiningSet
+        fields = '__all__'

@@ -1,25 +1,34 @@
+# products/models.py
+
 from django.db import models
-from django.contrib.auth.models import User
-# Create your models here.
 
-class Country(models.Model):
+# Abstract base model for common product fields
+class AbstractProduct(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='products/')
+    description = models.TextField(blank=True)
+    is_featured = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    country_name = models.CharField()
+    class Meta:
+        abstract = True
 
+# Chair model
+class Chair(AbstractProduct):
+    material = models.CharField(max_length=100, default="Wood")
 
-class Address(models.Model):
-    street_number = models.CharField(max_length=100)
-    address_line1 = models.CharField(max_length=100)
-    address_line2 = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    region = models.CharField()
-    postal_code = models.CharField(max_length=100)
-    country_id = models.ForeignKey(Country, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"Chair: {self.name}"
 
+# Sofa model
+class Sofa(AbstractProduct):
+    seats = models.IntegerField(default=3)
+    upholstery = models.CharField(max_length=100, default="Leather")
 
-class UserAddress(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    address_id = models.ForeignKey(Address, on_delete=models.CASCADE)
-    is_defult = models.BooleanField(default=False)
+    def __str__(self):
+        return f"Sofa: {self.name}"
 
-    
+# Dining Set model
+class DiningSet(AbstractProduct):
+    table_shape = models.CharField(max_length=50, choices=[("Round", "Round"), ("Rectangular", "Rectangular")])
